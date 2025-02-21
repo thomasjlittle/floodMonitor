@@ -1,10 +1,13 @@
-import datetime
 import logging
+
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from datapoint import UnProcessedDataPoint, ProcessedDataPoint
 
 def process_data(
         data: list[UnProcessedDataPoint],
-          stage_threshold: float, 
+          low_stage_threshold: float, 
+          high_stage_threshold: float, 
           logger: logging.Logger = None
           ) -> list[ProcessedDataPoint]:
     # Log
@@ -19,17 +22,25 @@ def process_data(
         ]
 
         # Get flood points
-        flood_points = find_flood_points(processed_data, stage_threshold)
+        low_flood_points, high_flood_points = find_flood_points(processed_data, low_stage_threshold, high_stage_threshold)
         logger.info("Data processed, ez mode.")
-        return flood_points
-    except Exception:
-        logger.error("Aw shucks, data processing didn't work.")
+        return low_flood_points, high_flood_points
+    
+    except Exception as e:
+        logger.error("Aw shucks, data processing didn't work.", exc_info=True)
+        return []
 
-        
-def convert_dates_to_datetime(date: int):
-    # P sure these are in ms (like 50:50? hehe)
-    return datetime.datetime.fromtimestamp(date / 1000) 
 
-def find_flood_points(processed_data: list[ProcessedDataPoint], stage_threshold: float):
+def convert_dates_to_datetime(date: int) -> datetime:
+    # Assuming the timestamp is in milliseconds.
+    utc_time = datetime.fromtimestamp(date / 1000, tz=timezone.utc)
+    pst_tz = ZoneInfo("America/Los_Angeles") # this is gross dont look at me
+    pst_time = utc_time.astimezone(pst_tz)
+    return pst_time
+
+
+def find_flood_points(processed_data: list[ProcessedDataPoint], low_stage_threshold: float, high_stage_threshold: float) -> tuple[list[ProcessedDataPoint], list[ProcessedDataPoint]]:
     # Just use a list comp bc theres not a ton of data and i dont wanna do it the right way
-    return [point for point in processed_data if point.stage > stage_threshold]
+    low_flood_points = [point for point in processed_data if high_stage_threshold > point.stage >= low_stage_threshold]
+    high_flood_points = [point for point in processed_data if point.stage >= high_stage_threshold]
+    return low_flood_points, high_flood_points

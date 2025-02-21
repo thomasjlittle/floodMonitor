@@ -10,4 +10,3 @@ class ProcessedDataPoint:
 
     def __str__(self):
         return f"Stage: {self.stage}, Predicted at {self.date.strftime('%m/%d/%Y %I:%M %p')}"
-        

@@ -5,6 +5,8 @@ from email.mime.text import MIMEText
 
 def send_email(
         subject: str, 
+        station: str,
+        warning_level: str,
         html_body: str, 
         from_addr: str, 
         to_addr: str, 
@@ -19,7 +21,7 @@ def send_email(
     
     # Create a MIME message
     msg = MIMEMultipart("alternative")
-    msg['Subject'] = subject
+    msg['Subject'] = f"{station} {subject} ({warning_level})"
     msg['From'] = from_addr
     msg['To'] = to_addr
 
