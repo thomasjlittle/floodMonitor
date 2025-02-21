@@ -1,0 +1,38 @@
+name: Send Email Report
+
+on:
+  schedule:
+    # Runs every day at 6 AM PST; adjust cron expression as needed
+    - cron: '0 14 * * *'
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+      
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+          echo "${HOME}/.local/bin" >> $GITHUB_PATH
+      
+      - name: Install dependencies with Poetry
+        run: poetry install
+          
+      - name: Run email report script
+        env:
+          SUBJECT: ${{ secrets.SUBJECT }}
+          SENDERS_EMAIL: ${{ secrets.SENDERS_EMAIL }}
+          RECEIVERS_EMAIL: ${{ secrets.RECEIVERS_EMAIL }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: python send_email.py
