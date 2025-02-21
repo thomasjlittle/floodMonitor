@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "noaaapi"
+name = "floodmonitor"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
@@ -7,11 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-matplotlib = "^3.10.0"
-requests = "^2.32.3"
-beautifulsoup4 = "^4.13.3"
-html5lib = "^1.1"
 dotenv = "^0.9.9"
+beautifulsoup4 = "^4.13.3"
 
 
 [build-system]
