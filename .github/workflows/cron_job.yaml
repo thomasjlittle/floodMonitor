@@ -5,6 +5,7 @@ on:
     # Runs every day at 6 AM PST; adjust cron expression as needed
     - cron: '0 14 * * *'
   workflow_dispatch:  # Allows manual triggering
+  push:
 
 jobs:
   send-email:
@@ -18,21 +19,17 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install Poetry
+      - name: Install dependencies from requirements.txt
         run: |
-          curl -sSL https://install.python-poetry.org | python -
-          echo "${HOME}/.local/bin" >> $GITHUB_PATH
-      
-      - name: Install dependencies with Poetry
-        run: poetry install
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
           
       - name: Run email report script
         env:
-          SUBJECT: ${{ secrets.SUBJECT }}
-          SENDERS_EMAIL: ${{ secrets.SENDERS_EMAIL }}
-          RECEIVERS_EMAIL: ${{ secrets.RECEIVERS_EMAIL }}
-          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-        run: python send_email.py
+        run: |
+          source venv/bin/activate
+          python src/main.py
