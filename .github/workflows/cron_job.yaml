@@ -5,6 +5,7 @@ on:
     # Runs every day at 6 AM PST; adjust cron expression as needed
     - cron: '0 14 * * *'
   workflow_dispatch:  # Allows manual triggering
+  push:
 
 jobs:
   send-email:
