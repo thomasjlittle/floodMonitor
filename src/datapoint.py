@@ -1,5 +1,3 @@
-import datetime
-
 class UnProcessedDataPoint:
     def __init__(self, date: int, stage: float):
         self.date = date
