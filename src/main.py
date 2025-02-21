@@ -41,7 +41,7 @@ smtp_port = os.getenv("SMTP_PORT")
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
 
-if not all(sender_email, receiver_email, smtp_server, smtp_port, username, password):
+if not all([sender_email, receiver_email, smtp_server, smtp_port, username, password]):
     logger.error("Ensure all environmental variables are configured correctly")
     raise Exception("Ensure all environmental variables are configured correctly")
 
