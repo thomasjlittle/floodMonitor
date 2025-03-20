@@ -43,13 +43,13 @@ if not url:
 # Set up the email info
 subject = os.getenv("SUBJECT","You've got Mail! >:)")
 sender_email = os.getenv("SENDERS_EMAIL")
-receiver_email = os.getenv("RECEIVERS_EMAIL")
+receiver_emails = os.getenv("RECEIVERS_EMAIL")
 smtp_server = os.getenv("SMTP_SERVER")
 smtp_port = os.getenv("SMTP_PORT")
 username = os.getenv("USERNAME")
 password = os.getenv("PASSWORD")
 
-if not all([sender_email, receiver_email, smtp_server, smtp_port, username, password]):
+if not all([sender_email, receiver_emails, smtp_server, smtp_port, username, password]):
     logger.error("Ensure all environmental variables are configured correctly")
     raise Exception("Ensure all environmental variables are configured correctly")
 
@@ -84,7 +84,7 @@ if report:
         warning_level,
         html_body=report,
         from_addr=sender_email,
-        to_addr=receiver_email,
+        to_addrs=receiver_emails.split(","),
         smtp_server=smtp_server,
         smtp_port=smtp_port,
         username=username,

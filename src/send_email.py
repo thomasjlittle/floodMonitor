@@ -9,7 +9,7 @@ def send_email(
         warning_level: str,
         html_body: str, 
         from_addr: str, 
-        to_addr: str, 
+        to_addrs: list[str], 
         smtp_server: str, 
         smtp_port: int, 
         username: str, 
@@ -23,7 +23,7 @@ def send_email(
     msg = MIMEMultipart("alternative")
     msg['Subject'] = f"{station} {subject} ({warning_level})"
     msg['From'] = from_addr
-    msg['To'] = to_addr
+    msg['To'] = ", ".join(to_addrs)
 
     # Attach the HTML part of the email
     html_part = MIMEText(html_body, 'html')
@@ -33,7 +33,7 @@ def send_email(
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.starttls()  # Upgrade the connection to secure
             server.login(username, password)
-            server.sendmail(from_addr, to_addr, msg.as_string())
+            server.sendmail(from_addr, to_addrs, msg.as_string())
         logger.info("Email sent successfully.")
     except Exception as e:
         logger.error("Failed to send email: %s", e)
