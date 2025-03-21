@@ -61,15 +61,15 @@ points_over_low_threshold, points_over_high_threshold = process_data(data, low_s
 
 # Make the report
 utc_time = datetime.datetime.now()
-pst_tz = ZoneInfo("America/Los_Angeles") # this is gross dont look at me
-pst_time = utc_time.astimezone(pst_tz)
-current_hour = pst_time.hour
+# pst_tz = ZoneInfo("America/Los_Angeles") # this is gross dont look at me
+# pst_time = utc_time.astimezone(pst_tz)
+current_hour = utc_time.hour
 report = None
 
 if points_over_high_threshold:
     warning_level = os.getenv("HIGH_WARNING_LEVEL", "HIGH")
     report = make_report(points_over_low_threshold, points_over_high_threshold, low_stage_threshold, high_stage_threshold, url, logger)
-elif current_hour in [6,18]:
+elif current_hour in [13, 1]:
     if points_over_low_threshold:
         warning_level = os.getenv("MEDIUM_WARNING_LEVEL", "MEDIUM")
     else:
