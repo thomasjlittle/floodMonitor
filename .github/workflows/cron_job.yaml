@@ -3,8 +3,7 @@ name: Send Email Report
 on:
   schedule:
     # Runs every day at 6AM, 12PM, 6PM, and 10PM PST; adjust cron expression as needed
-    - cron: '0 6,12,18,22 * * *'
-      timezone: America/Los_Angeles*'
+    - cron: '0 13,19,1,5 * * *'
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
