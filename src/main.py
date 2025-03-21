@@ -60,10 +60,9 @@ data = scrape_web(url, logger)
 points_over_low_threshold, points_over_high_threshold = process_data(data, low_stage_threshold, high_stage_threshold, logger)
 
 # Make the report
-utc_time = datetime.datetime.now()
-# pst_tz = ZoneInfo("America/Los_Angeles") # this is gross dont look at me
-# pst_time = utc_time.astimezone(pst_tz)
-current_hour = utc_time.hour
+utc_time = datetime.timezone.utc
+current_time = datetime.datetime.now(datetime.timezone.utc)
+current_hour = current_time.hour
 report = None
 
 if points_over_high_threshold:
