@@ -68,7 +68,7 @@ report = None
 if points_over_high_threshold:
     warning_level = os.getenv("HIGH_WARNING_LEVEL", "HIGH")
     report = make_report(points_over_low_threshold, points_over_high_threshold, low_stage_threshold, high_stage_threshold, url, logger)
-elif current_hour in [13, 1]:
+elif current_hour in [12, 13, 14, 0, 1, 2]:
     if points_over_low_threshold:
         warning_level = os.getenv("MEDIUM_WARNING_LEVEL", "MEDIUM")
     else:
