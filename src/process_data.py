@@ -40,7 +40,8 @@ def convert_dates_to_datetime(date: int) -> datetime:
 
 
 def find_flood_points(processed_data: list[ProcessedDataPoint], low_stage_threshold: float, high_stage_threshold: float) -> tuple[list[ProcessedDataPoint], list[ProcessedDataPoint]]:
-    # Just use a list comp bc theres not a ton of data and i dont wanna do it the right way
-    low_flood_points = [point for point in processed_data if high_stage_threshold > point.stage >= low_stage_threshold]
-    high_flood_points = [point for point in processed_data if point.stage >= high_stage_threshold]
+    # Return any points that are above the thresholds AND are in the future
+    current_time = datetime.now(tz=timezone.utc).astimezone(ZoneInfo("America/Los_Angeles"))
+    low_flood_points = [point for point in processed_data if (high_stage_threshold > point.stage >= low_stage_threshold and point.date >= current_time)]
+    high_flood_points = [point for point in processed_data if (point.stage >= high_stage_threshold and point.date >= current_time)]
     return low_flood_points, high_flood_points
